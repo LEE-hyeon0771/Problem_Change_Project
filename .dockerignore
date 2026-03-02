@@ -1,0 +1,12 @@
+.git
+.gitignore
+.venv
+.venv-wsl
+__pycache__
+.pytest_cache
+*.pyc
+frontend/node_modules
+frontend/dist
+tests
+codex.md
+codex_update.md

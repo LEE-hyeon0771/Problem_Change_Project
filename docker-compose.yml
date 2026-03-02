@@ -1,0 +1,46 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: problem-change-app
+    ports:
+      - "8000:8000"
+    environment:
+      APP_ENV: "dev"
+      LOG_LEVEL: "INFO"
+      USE_LLM_GENERATION: "${USE_LLM_GENERATION:-true}"
+      GOOGLE_API_KEY: "${GOOGLE_API_KEY:-}"
+      GEMINI_API_KEY: "${GEMINI_API_KEY:-}"
+      GEMINI_MODEL: "${GEMINI_MODEL:-gemini-3-flash-preview}"
+      ENABLE_PROBLEM_PERSISTENCE: "true"
+      ENABLE_DB_PERSISTENCE: "true"
+      DATABASE_URL: "postgresql+psycopg://postgres:postgres@db:5432/problem_db"
+      DATABASE_ECHO: "false"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./app/problems:/app/app/problems
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    container_name: problem-change-db
+    environment:
+      POSTGRES_DB: "problem_db"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d problem_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

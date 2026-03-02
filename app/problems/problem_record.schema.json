@@ -1,0 +1,870 @@
+{
+  "$defs": {
+    "BlankResponse": {
+      "properties": {
+        "type": {
+          "const": "blank",
+          "default": "blank",
+          "title": "Type",
+          "type": "string"
+        },
+        "passage": {
+          "description": "문항에 사용된 지문(가공본 포함)",
+          "title": "Passage",
+          "type": "string"
+        },
+        "question": {
+          "description": "문항 지시문",
+          "title": "Question",
+          "type": "string"
+        },
+        "choices": {
+          "description": "5개 선지",
+          "items": {
+            "$ref": "#/$defs/Choice"
+          },
+          "title": "Choices",
+          "type": "array"
+        },
+        "answer": {
+          "$ref": "#/$defs/Choice",
+          "description": "정답 선지"
+        },
+        "explanation": {
+          "description": "정답 해설",
+          "title": "Explanation",
+          "type": "string"
+        },
+        "meta": {
+          "additionalProperties": true,
+          "title": "Meta",
+          "type": "object"
+        }
+      },
+      "required": [
+        "passage",
+        "question",
+        "choices",
+        "answer",
+        "explanation"
+      ],
+      "title": "BlankResponse",
+      "type": "object"
+    },
+    "Choice": {
+      "properties": {
+        "label": {
+          "description": "선지 번호 라벨(예: ①, ②)",
+          "title": "Label",
+          "type": "string"
+        },
+        "text": {
+          "description": "선지 내용",
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "label",
+        "text"
+      ],
+      "title": "Choice",
+      "type": "object"
+    },
+    "GenerateRequest": {
+      "example": {
+        "choices": 5,
+        "debug": false,
+        "difficulty": "mid",
+        "explain": true,
+        "passage": "People often rely on repeated routines because habits reduce cognitive load and free attention for difficult tasks. However, habits can hide weak assumptions when people stop reflecting on why they act in a certain way. Therefore, good decision making requires stable routines and periodic review.",
+        "return_korean_stem": true,
+        "seed": 123,
+        "style": "edu_office"
+      },
+      "properties": {
+        "passage": {
+          "description": "영어 지문 원문. 보통 60단어 이상을 권장합니다.",
+          "minLength": 1,
+          "title": "Passage",
+          "type": "string"
+        },
+        "difficulty": {
+          "default": "mid",
+          "description": "난이도. easy(쉬움), mid(보통), hard(어려움)",
+          "enum": [
+            "easy",
+            "mid",
+            "hard"
+          ],
+          "title": "Difficulty",
+          "type": "string"
+        },
+        "choices": {
+          "default": 5,
+          "description": "선지 개수. 현재 버전은 5로 고정입니다.",
+          "maximum": 5,
+          "minimum": 5,
+          "title": "Choices",
+          "type": "integer"
+        },
+        "seed": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "재현성 보조값. 같은 seed일수록 결과가 유사해질 수 있습니다.",
+          "title": "Seed"
+        },
+        "style": {
+          "const": "edu_office",
+          "default": "edu_office",
+          "description": "문항 스타일. 현재 edu_office만 지원합니다.",
+          "title": "Style",
+          "type": "string"
+        },
+        "explain": {
+          "default": true,
+          "description": "해설 포함 여부",
+          "title": "Explain",
+          "type": "boolean"
+        },
+        "return_korean_stem": {
+          "default": true,
+          "description": "문항 지시문을 한국어로 반환할지 여부",
+          "title": "Return Korean Stem",
+          "type": "boolean"
+        },
+        "debug": {
+          "default": false,
+          "description": "디버그 정보(meta.debug) 포함 여부",
+          "title": "Debug",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "passage"
+      ],
+      "title": "GenerateRequest",
+      "type": "object"
+    },
+    "GrammarResponse": {
+      "properties": {
+        "type": {
+          "const": "grammar",
+          "default": "grammar",
+          "title": "Type",
+          "type": "string"
+        },
+        "passage": {
+          "description": "문항에 사용된 지문(가공본 포함)",
+          "title": "Passage",
+          "type": "string"
+        },
+        "question": {
+          "description": "문항 지시문",
+          "title": "Question",
+          "type": "string"
+        },
+        "choices": {
+          "description": "5개 선지",
+          "items": {
+            "$ref": "#/$defs/Choice"
+          },
+          "title": "Choices",
+          "type": "array"
+        },
+        "answer": {
+          "$ref": "#/$defs/Choice",
+          "description": "정답 선지"
+        },
+        "explanation": {
+          "description": "정답 해설",
+          "title": "Explanation",
+          "type": "string"
+        },
+        "meta": {
+          "additionalProperties": true,
+          "title": "Meta",
+          "type": "object"
+        }
+      },
+      "required": [
+        "passage",
+        "question",
+        "choices",
+        "answer",
+        "explanation"
+      ],
+      "title": "GrammarResponse",
+      "type": "object"
+    },
+    "ImplicitResponse": {
+      "properties": {
+        "type": {
+          "const": "implicit",
+          "default": "implicit",
+          "title": "Type",
+          "type": "string"
+        },
+        "passage": {
+          "description": "문항에 사용된 지문(가공본 포함)",
+          "title": "Passage",
+          "type": "string"
+        },
+        "question": {
+          "description": "문항 지시문",
+          "title": "Question",
+          "type": "string"
+        },
+        "choices": {
+          "description": "5개 선지",
+          "items": {
+            "$ref": "#/$defs/Choice"
+          },
+          "title": "Choices",
+          "type": "array"
+        },
+        "answer": {
+          "$ref": "#/$defs/Choice",
+          "description": "정답 선지"
+        },
+        "explanation": {
+          "description": "정답 해설",
+          "title": "Explanation",
+          "type": "string"
+        },
+        "meta": {
+          "additionalProperties": true,
+          "title": "Meta",
+          "type": "object"
+        }
+      },
+      "required": [
+        "passage",
+        "question",
+        "choices",
+        "answer",
+        "explanation"
+      ],
+      "title": "ImplicitResponse",
+      "type": "object"
+    },
+    "InsertionResponse": {
+      "properties": {
+        "type": {
+          "const": "insertion",
+          "default": "insertion",
+          "title": "Type",
+          "type": "string"
+        },
+        "passage": {
+          "description": "문항에 사용된 지문(가공본 포함)",
+          "title": "Passage",
+          "type": "string"
+        },
+        "question": {
+          "description": "문항 지시문",
+          "title": "Question",
+          "type": "string"
+        },
+        "choices": {
+          "description": "5개 선지",
+          "items": {
+            "$ref": "#/$defs/Choice"
+          },
+          "title": "Choices",
+          "type": "array"
+        },
+        "answer": {
+          "$ref": "#/$defs/Choice",
+          "description": "정답 선지"
+        },
+        "explanation": {
+          "description": "정답 해설",
+          "title": "Explanation",
+          "type": "string"
+        },
+        "meta": {
+          "additionalProperties": true,
+          "title": "Meta",
+          "type": "object"
+        }
+      },
+      "required": [
+        "passage",
+        "question",
+        "choices",
+        "answer",
+        "explanation"
+      ],
+      "title": "InsertionResponse",
+      "type": "object"
+    },
+    "IrrelevantResponse": {
+      "properties": {
+        "type": {
+          "const": "irrelevant",
+          "default": "irrelevant",
+          "title": "Type",
+          "type": "string"
+        },
+        "passage": {
+          "description": "문항에 사용된 지문(가공본 포함)",
+          "title": "Passage",
+          "type": "string"
+        },
+        "question": {
+          "description": "문항 지시문",
+          "title": "Question",
+          "type": "string"
+        },
+        "choices": {
+          "description": "5개 선지",
+          "items": {
+            "$ref": "#/$defs/Choice"
+          },
+          "title": "Choices",
+          "type": "array"
+        },
+        "answer": {
+          "$ref": "#/$defs/Choice",
+          "description": "정답 선지"
+        },
+        "explanation": {
+          "description": "정답 해설",
+          "title": "Explanation",
+          "type": "string"
+        },
+        "meta": {
+          "additionalProperties": true,
+          "title": "Meta",
+          "type": "object"
+        }
+      },
+      "required": [
+        "passage",
+        "question",
+        "choices",
+        "answer",
+        "explanation"
+      ],
+      "title": "IrrelevantResponse",
+      "type": "object"
+    },
+    "OrderResponse": {
+      "properties": {
+        "type": {
+          "const": "order",
+          "default": "order",
+          "title": "Type",
+          "type": "string"
+        },
+        "passage": {
+          "description": "문항에 사용된 지문(가공본 포함)",
+          "title": "Passage",
+          "type": "string"
+        },
+        "question": {
+          "description": "문항 지시문",
+          "title": "Question",
+          "type": "string"
+        },
+        "choices": {
+          "description": "5개 선지",
+          "items": {
+            "$ref": "#/$defs/Choice"
+          },
+          "title": "Choices",
+          "type": "array"
+        },
+        "answer": {
+          "$ref": "#/$defs/Choice",
+          "description": "정답 선지"
+        },
+        "explanation": {
+          "description": "정답 해설",
+          "title": "Explanation",
+          "type": "string"
+        },
+        "meta": {
+          "additionalProperties": true,
+          "title": "Meta",
+          "type": "object"
+        }
+      },
+      "required": [
+        "passage",
+        "question",
+        "choices",
+        "answer",
+        "explanation"
+      ],
+      "title": "OrderResponse",
+      "type": "object"
+    },
+    "ReferenceResponse": {
+      "properties": {
+        "type": {
+          "const": "reference",
+          "default": "reference",
+          "title": "Type",
+          "type": "string"
+        },
+        "passage": {
+          "description": "문항에 사용된 지문(가공본 포함)",
+          "title": "Passage",
+          "type": "string"
+        },
+        "question": {
+          "description": "문항 지시문",
+          "title": "Question",
+          "type": "string"
+        },
+        "choices": {
+          "description": "5개 선지",
+          "items": {
+            "$ref": "#/$defs/Choice"
+          },
+          "title": "Choices",
+          "type": "array"
+        },
+        "answer": {
+          "$ref": "#/$defs/Choice",
+          "description": "정답 선지"
+        },
+        "explanation": {
+          "description": "정답 해설",
+          "title": "Explanation",
+          "type": "string"
+        },
+        "meta": {
+          "additionalProperties": true,
+          "title": "Meta",
+          "type": "object"
+        }
+      },
+      "required": [
+        "passage",
+        "question",
+        "choices",
+        "answer",
+        "explanation"
+      ],
+      "title": "ReferenceResponse",
+      "type": "object"
+    },
+    "StorageMeta": {
+      "additionalProperties": false,
+      "properties": {
+        "file_path": {
+          "description": "문제 JSON 저장 경로",
+          "minLength": 1,
+          "pattern": "^app/problems/[a-z-]+/[a-f0-9]{16}/attempt_[0-9]{3,}\\.json$",
+          "title": "File Path",
+          "type": "string"
+        },
+        "db_saved": {
+          "default": false,
+          "description": "DB 저장 성공 여부",
+          "title": "Db Saved",
+          "type": "boolean"
+        },
+        "db_row_id": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "DB 저장 row id",
+          "title": "Db Row Id"
+        }
+      },
+      "required": [
+        "file_path"
+      ],
+      "title": "StorageMeta",
+      "type": "object"
+    },
+    "SummaryResponse": {
+      "properties": {
+        "type": {
+          "const": "summary",
+          "default": "summary",
+          "title": "Type",
+          "type": "string"
+        },
+        "passage": {
+          "description": "문항에 사용된 지문(가공본 포함)",
+          "title": "Passage",
+          "type": "string"
+        },
+        "question": {
+          "description": "문항 지시문",
+          "title": "Question",
+          "type": "string"
+        },
+        "choices": {
+          "description": "5개 선지",
+          "items": {
+            "$ref": "#/$defs/Choice"
+          },
+          "title": "Choices",
+          "type": "array"
+        },
+        "answer": {
+          "$ref": "#/$defs/Choice",
+          "description": "정답 선지"
+        },
+        "explanation": {
+          "description": "정답 해설",
+          "title": "Explanation",
+          "type": "string"
+        },
+        "meta": {
+          "additionalProperties": true,
+          "title": "Meta",
+          "type": "object"
+        }
+      },
+      "required": [
+        "passage",
+        "question",
+        "choices",
+        "answer",
+        "explanation"
+      ],
+      "title": "SummaryResponse",
+      "type": "object"
+    },
+    "TitleResponse": {
+      "properties": {
+        "type": {
+          "const": "title",
+          "default": "title",
+          "title": "Type",
+          "type": "string"
+        },
+        "passage": {
+          "description": "문항에 사용된 지문(가공본 포함)",
+          "title": "Passage",
+          "type": "string"
+        },
+        "question": {
+          "description": "문항 지시문",
+          "title": "Question",
+          "type": "string"
+        },
+        "choices": {
+          "description": "5개 선지",
+          "items": {
+            "$ref": "#/$defs/Choice"
+          },
+          "title": "Choices",
+          "type": "array"
+        },
+        "answer": {
+          "$ref": "#/$defs/Choice",
+          "description": "정답 선지"
+        },
+        "explanation": {
+          "description": "정답 해설",
+          "title": "Explanation",
+          "type": "string"
+        },
+        "meta": {
+          "additionalProperties": true,
+          "title": "Meta",
+          "type": "object"
+        }
+      },
+      "required": [
+        "passage",
+        "question",
+        "choices",
+        "answer",
+        "explanation"
+      ],
+      "title": "TitleResponse",
+      "type": "object"
+    },
+    "TopicResponse": {
+      "properties": {
+        "type": {
+          "const": "topic",
+          "default": "topic",
+          "title": "Type",
+          "type": "string"
+        },
+        "passage": {
+          "description": "문항에 사용된 지문(가공본 포함)",
+          "title": "Passage",
+          "type": "string"
+        },
+        "question": {
+          "description": "문항 지시문",
+          "title": "Question",
+          "type": "string"
+        },
+        "choices": {
+          "description": "5개 선지",
+          "items": {
+            "$ref": "#/$defs/Choice"
+          },
+          "title": "Choices",
+          "type": "array"
+        },
+        "answer": {
+          "$ref": "#/$defs/Choice",
+          "description": "정답 선지"
+        },
+        "explanation": {
+          "description": "정답 해설",
+          "title": "Explanation",
+          "type": "string"
+        },
+        "meta": {
+          "additionalProperties": true,
+          "title": "Meta",
+          "type": "object"
+        }
+      },
+      "required": [
+        "passage",
+        "question",
+        "choices",
+        "answer",
+        "explanation"
+      ],
+      "title": "TopicResponse",
+      "type": "object"
+    },
+    "VocabResponse": {
+      "properties": {
+        "type": {
+          "const": "vocab",
+          "default": "vocab",
+          "title": "Type",
+          "type": "string"
+        },
+        "passage": {
+          "description": "문항에 사용된 지문(가공본 포함)",
+          "title": "Passage",
+          "type": "string"
+        },
+        "question": {
+          "description": "문항 지시문",
+          "title": "Question",
+          "type": "string"
+        },
+        "choices": {
+          "description": "5개 선지",
+          "items": {
+            "$ref": "#/$defs/Choice"
+          },
+          "title": "Choices",
+          "type": "array"
+        },
+        "answer": {
+          "$ref": "#/$defs/Choice",
+          "description": "정답 선지"
+        },
+        "explanation": {
+          "description": "정답 해설",
+          "title": "Explanation",
+          "type": "string"
+        },
+        "meta": {
+          "additionalProperties": true,
+          "title": "Meta",
+          "type": "object"
+        }
+      },
+      "required": [
+        "passage",
+        "question",
+        "choices",
+        "answer",
+        "explanation"
+      ],
+      "title": "VocabResponse",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "example": {
+    "attempt_no": 2,
+    "created_at": "2026-03-02T12:34:56Z",
+    "passage_id": "9f13ac82d4b167d1",
+    "problem_type": "title",
+    "problem_uid": "f53e58ac1ce348f3a7c2fef2deca47fe",
+    "request": {
+      "choices": 5,
+      "debug": false,
+      "difficulty": "mid",
+      "explain": true,
+      "passage": "Since their start in the early 1950s U.S. television sitcoms ...",
+      "return_korean_stem": true,
+      "seed": 123,
+      "style": "edu_office"
+    },
+    "result": {
+      "answer": {
+        "label": "③",
+        "text": "Choice C"
+      },
+      "choices": [
+        {
+          "label": "①",
+          "text": "Choice A"
+        },
+        {
+          "label": "②",
+          "text": "Choice B"
+        },
+        {
+          "label": "③",
+          "text": "Choice C"
+        },
+        {
+          "label": "④",
+          "text": "Choice D"
+        },
+        {
+          "label": "⑤",
+          "text": "Choice E"
+        }
+      ],
+      "explanation": "정답 근거 ...",
+      "meta": {
+        "difficulty": "mid",
+        "seed": 123
+      },
+      "passage": "Since their start in the early 1950s U.S. television sitcoms ...",
+      "question": "다음 글의 제목으로 가장 적절한 것은?",
+      "type": "title"
+    },
+    "schema_version": "1.0.0",
+    "storage_meta": {
+      "db_row_id": null,
+      "db_saved": false,
+      "file_path": "app/problems/title/9f13ac82d4b167d1/attempt_002.json"
+    }
+  },
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "problem_uid": {
+      "description": "문제 저장 레코드 고유 식별자",
+      "pattern": "^[a-f0-9]{32}$",
+      "title": "Problem Uid",
+      "type": "string"
+    },
+    "problem_type": {
+      "description": "문제 유형",
+      "enum": [
+        "title",
+        "topic",
+        "summary",
+        "implicit",
+        "insertion",
+        "order",
+        "irrelevant",
+        "blank",
+        "reference",
+        "vocab",
+        "grammar"
+      ],
+      "title": "Problem Type",
+      "type": "string"
+    },
+    "passage_id": {
+      "description": "정규화된 지문 해시 식별자",
+      "pattern": "^[a-f0-9]{16}$",
+      "title": "Passage Id",
+      "type": "string"
+    },
+    "attempt_no": {
+      "description": "같은 passage_id + problem_type 조합에서의 생성 순번(1부터 시작)",
+      "minimum": 1,
+      "title": "Attempt No",
+      "type": "integer"
+    },
+    "created_at": {
+      "description": "저장 시각(UTC)",
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "request": {
+      "$ref": "#/$defs/GenerateRequest",
+      "description": "문제 생성 요청 원본"
+    },
+    "result": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/TitleResponse"
+        },
+        {
+          "$ref": "#/$defs/TopicResponse"
+        },
+        {
+          "$ref": "#/$defs/SummaryResponse"
+        },
+        {
+          "$ref": "#/$defs/ImplicitResponse"
+        },
+        {
+          "$ref": "#/$defs/InsertionResponse"
+        },
+        {
+          "$ref": "#/$defs/OrderResponse"
+        },
+        {
+          "$ref": "#/$defs/IrrelevantResponse"
+        },
+        {
+          "$ref": "#/$defs/BlankResponse"
+        },
+        {
+          "$ref": "#/$defs/ReferenceResponse"
+        },
+        {
+          "$ref": "#/$defs/VocabResponse"
+        },
+        {
+          "$ref": "#/$defs/GrammarResponse"
+        }
+      ],
+      "description": "문제 생성 결과",
+      "title": "Result"
+    },
+    "storage_meta": {
+      "$ref": "#/$defs/StorageMeta",
+      "description": "저장 메타 정보"
+    }
+  },
+  "required": [
+    "problem_type",
+    "passage_id",
+    "attempt_no",
+    "request",
+    "result",
+    "storage_meta"
+  ],
+  "title": "SavedProblemRecord",
+  "type": "object"
+}
