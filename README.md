@@ -135,15 +135,41 @@ flowchart TB
 ```text
 app/
   agents/        # 유형별 문제 생성기
-  schemas/       # 요청/응답 데이터 구조
+  schemas/       # 요청/응답 + 저장 스키마
   prompts/       # LLM 지시문 템플릿
   toolkit/       # 검증, 텍스트 처리, 렌더링 유틸
   llm/           # LLM 클라이언트, JSON 파싱/스키마 처리
+  storage/       # 파일/DB 저장 서비스
+  db/            # SQLAlchemy DB 모델
+  problems/      # 저장된 문제 JSON + JSON Schema
   main.py        # FastAPI 라우트 진입점
 frontend/
   src/           # Svelte UI
 tests/           # 스모크/유효성/무결성 테스트
+Dockerfile
+docker-compose.yml
+Makefile
 ```
+
+## 문제 저장 구조 (JSON + DB)
+
+문항이 생성되면(기본값 `ENABLE_PROBLEM_PERSISTENCE=true`) 자동으로 JSON 파일이 저장됩니다.
+
+- 파일 경로 규칙: `app/problems/{problem_type}/{passage_id}/attempt_{n}.json`
+- `passage_id`: 지문 정규화(공백/대소문자 정리) 후 SHA-256 해시 앞 16자리
+- `attempt_no`: 같은 `problem_type + passage_id` 조합에서 1부터 순번 증가
+- 저장 스키마 파일: `app/problems/problem_record.schema.json`
+
+저장된 JSON에는 `request`, `result`, `storage_meta`가 함께 들어가며, API 응답의 `meta.storage`에도 아래 정보가 포함됩니다.
+
+- `problem_uid`
+- `passage_id`
+- `attempt_no`
+- `file_path`
+- `db_saved`
+- `db_row_id`
+
+`ENABLE_DB_PERSISTENCE=true`이고 `DATABASE_URL`이 설정되면 SQLAlchemy로 `problem_records` 테이블에도 함께 저장됩니다.
 
 ## 환경 변수(.env) 설명
 
@@ -161,6 +187,10 @@ tests/           # 스모크/유효성/무결성 테스트
 | `USE_LLM_GENERATION` | `true` | LLM 생성 사용 여부 |
 | `ENABLE_SELF_CHECK` | `false` | 자체 점검 사용 여부 |
 | `SELF_CHECK_MAX_RETRY` | `1` | 자체 점검 재시도 횟수 |
+| `ENABLE_PROBLEM_PERSISTENCE` | `true` | 생성 결과를 `app/problems`에 JSON 파일로 저장할지 여부 |
+| `ENABLE_DB_PERSISTENCE` | `false` | SQLAlchemy를 통해 DB에도 함께 저장할지 여부 |
+| `DATABASE_URL` | `""` | DB 연결 문자열 (예: `postgresql+psycopg://postgres:postgres@db:5432/problem_db`) |
+| `DATABASE_ECHO` | `false` | SQLAlchemy SQL 로그 출력 여부 |
 
 `GOOGLE_API_KEY` 또는 `GEMINI_API_KEY` 중 하나만 있어도 됩니다.
 
@@ -179,12 +209,40 @@ Swagger 문서:
 
 - `GET /health`
 
+## Makefile 명령
+
+```bash
+make start      # 백엔드(uvicorn) 포그라운드 실행
+make stop       # 백엔드(uvicorn) 종료
+make frontend   # 프론트엔드(vite) 실행
+make up         # docker compose up --build -d
+make down       # docker compose down
+```
+
+`make start`는 로그를 현재 터미널에 바로 출력합니다. 종료는 `Ctrl+C` 또는 다른 터미널에서 `make stop`으로 가능합니다.
+
+## Docker Compose 실행 (API 8000 + PostgreSQL)
+
+```bash
+make up
+```
+
+- API: `http://localhost:8000`
+- Swagger: `http://localhost:8000/docs`
+- PostgreSQL: `localhost:5432`
+
+문제 JSON은 로컬 `app/problems` 디렉터리로 볼륨 마운트되어 컨테이너 재시작 후에도 유지됩니다.
+
+종료:
+
+```bash
+make down
+```
+
 ## 프론트엔드 실행
 
 ```bash
-cd frontend
-npm install
-npm run dev
+make frontend
 ```
 
 기본적으로 Vite proxy는 `http://localhost:8000` 백엔드로 연결됩니다.
@@ -238,101 +296,94 @@ curl -X POST "http://localhost:8000/api/v1/summary" \
 
 ## <가이드>
 
-아래 순서대로 그대로 따라하면, 개발 서버에서 바로 사용 가능합니다.
+아래 순서대로 진행하면 개발/도커 실행을 바로 할 수 있습니다.
 
-### 1) 준비물 설치
+### 1) 준비물
 
-- Python 3.10 이상
-- Node.js 18 이상
-- `uv` 설치
+- Python 3.10+
+- Node.js 18+
+- `uv`
+- Docker Desktop (Docker 사용 시)
 
-`uv` 설치 예시:
-
-```bash
-pip install uv
-```
-
-### 2) 프로젝트 폴더 이동
+WSL에서 `make`가 없다면:
 
 ```bash
-cd D:\English_Problem_Change\Problem_Change_Project
+sudo apt update
+sudo apt install -y make
 ```
 
-### 3) `.env` 파일 만들기
+### 2) 프로젝트 이동
 
-프로젝트 루트에 `.env` 파일을 만들고 아래처럼 입력합니다.
+```bash
+cd /mnt/d/English_Problem_Change/Problem_Change_Project
+```
+
+### 3) `.env` 설정
 
 ```env
 APP_ENV=dev
 LOG_LEVEL=INFO
 
 GOOGLE_API_KEY=여기에_키_입력
-# GEMINI_API_KEY=여기에_대체키_입력
 GEMINI_MODEL=gemini-3-flash-preview
 
 USE_LLM_GENERATION=true
 ENABLE_SELF_CHECK=false
 SELF_CHECK_MAX_RETRY=1
+
+ENABLE_PROBLEM_PERSISTENCE=true
+ENABLE_DB_PERSISTENCE=false
+# DATABASE_URL=postgresql+psycopg://postgres:postgres@localhost:5432/problem_db
+DATABASE_ECHO=false
 ```
 
-API 키 없이 로컬 fallback만 테스트하려면:
-
-```env
-USE_LLM_GENERATION=false
-```
-
-### 4) 백엔드 라이브러리 설치
+### 4) 의존성 설치
 
 ```bash
 uv sync --group dev
+cd frontend && npm install
 ```
 
-### 5) 백엔드 서버 실행
+### 5) 로컬 실행 (권장)
+
+백엔드:
 
 ```bash
-uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+make start
 ```
 
-성공하면 브라우저에서:
-
-- `http://localhost:8000/docs` 접속
-
-### 6) 프론트엔드 실행 (새 터미널)
+프론트엔드(새 터미널):
 
 ```bash
-cd D:\English_Problem_Change\Problem_Change_Project\frontend
-npm install
-npm run dev
+make frontend
 ```
 
-프론트 주소(보통):
-
-- `http://localhost:5173`
-
-### 7) 실제 사용
-
-- 프론트에서 유형 선택 (`title/topic/summary/implicit/...`)
-- 지문 입력
-- `문항 생성` 클릭
-- 결과에서 정답/해설/JSON 확인
-
-### 8) 빠른 점검 명령
-
-백엔드 상태 확인:
+### 6) Docker 실행
 
 ```bash
-curl http://localhost:8000/health
+make up
 ```
 
-테스트 실행:
+종료:
 
 ```bash
-uv run pytest -q
+make down
 ```
 
-프론트 빌드 확인:
+### 7) 저장 결과 확인
+
+문항 생성 후 아래 경로에 JSON이 생깁니다.
+
+```text
+app/problems/{problem_type}/{passage_id}/attempt_{n}.json
+```
+
+### 8) 문제 해결 팁 (WSL + Docker)
+
+`permission denied ... /var/run/docker.sock`가 나오면:
 
 ```bash
-cd frontend
-npm run build
+sudo groupadd docker 2>/dev/null || true
+sudo usermod -aG docker $USER
+newgrp docker
 ```

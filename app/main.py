@@ -18,10 +18,10 @@ from app.agents.title_agent import TitleAgent
 from app.agents.topic_agent import TopicAgent
 from app.agents.vocab_agent import VocabAgent
 from app.core.config import get_settings
-from app.core.errors import GenerationError, InputValidationError
+from app.core.errors import GenerationError, InputValidationError, PersistenceError
 from app.core.logging import configure_logging
 from app.llm.provider import build_llm_client
-from app.schemas.base import GenerateRequest
+from app.schemas.base import GenerateRequest, ProblemResponse
 from app.schemas.blank import BlankResponse
 from app.schemas.grammar import GrammarResponse
 from app.schemas.implicit import ImplicitResponse
@@ -33,6 +33,8 @@ from app.schemas.summary import SummaryResponse
 from app.schemas.title import TitleResponse
 from app.schemas.topic import TopicResponse
 from app.schemas.vocab import VocabResponse
+from app.storage.persistence import ProblemPersistenceService
+from app.storage.problem_store import LocalProblemStore
 
 settings = get_settings()
 configure_logging(settings.log_level)
@@ -77,6 +79,25 @@ blank_agent = BlankAgent(llm_client=llm_client, settings=settings)
 reference_agent = ReferenceAgent(llm_client=llm_client, settings=settings)
 vocab_agent = VocabAgent(llm_client=llm_client, settings=settings)
 grammar_agent = GrammarAgent(llm_client=llm_client, settings=settings)
+problem_store = LocalProblemStore()
+db_store = None
+db_persistence_enabled = settings.enable_db_persistence and settings.app_env != "test"
+if db_persistence_enabled:
+    try:
+        from app.storage.db_store import SQLAlchemyProblemStore
+
+        db_store = SQLAlchemyProblemStore(
+            database_url=settings.database_url,
+            echo=settings.database_echo,
+        )
+    except ModuleNotFoundError as exc:  # pragma: no cover
+        raise RuntimeError(
+            "ENABLE_DB_PERSISTENCE=true but SQLAlchemy dependencies are missing. "
+            "Install project dependencies first."
+        ) from exc
+elif settings.enable_db_persistence and settings.app_env == "test":
+    logger.info("DB persistence is disabled in APP_ENV=test.")
+problem_persistence = ProblemPersistenceService(local_store=problem_store, db_store=db_store)
 
 
 @app.get(
@@ -91,12 +112,31 @@ async def health() -> dict[str, str]:
 async def _run_agent(agent: Any, request: GenerateRequest):
     try:
         if hasattr(agent, "agenerate"):
-            return await agent.agenerate(request)
-        return await run_in_threadpool(agent.generate, request)
+            problem = await agent.agenerate(request)
+        else:
+            problem = await run_in_threadpool(agent.generate, request)
+
+        if settings.enable_problem_persistence and isinstance(problem, ProblemResponse):
+            saved = await run_in_threadpool(problem_persistence.persist, request=request, result=problem)
+            storage_meta = {
+                "problem_uid": saved.problem_uid,
+                "passage_id": saved.passage_id,
+                "attempt_no": saved.attempt_no,
+                "file_path": saved.storage_meta.file_path,
+                "db_saved": saved.storage_meta.db_saved,
+                "db_row_id": saved.storage_meta.db_row_id,
+            }
+            merged_meta = dict(problem.meta)
+            merged_meta["storage"] = storage_meta
+            problem.meta = merged_meta
+
+        return problem
     except InputValidationError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
     except GenerationError as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
+    except PersistenceError as exc:
+        raise HTTPException(status_code=500, detail=f"Persistence failed: {exc}") from exc
     except Exception as exc:  # pragma: no cover
         raise HTTPException(status_code=502, detail=f"Generation failed: {exc}") from exc
 

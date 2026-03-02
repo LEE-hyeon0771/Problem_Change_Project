@@ -4,3 +4,7 @@ class GenerationError(Exception):
 
 class InputValidationError(Exception):
     """Raised when input passage does not meet minimum constraints."""
+
+
+class PersistenceError(Exception):
+    """Raised when generated problem cannot be persisted."""

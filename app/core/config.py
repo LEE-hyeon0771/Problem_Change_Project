@@ -21,6 +21,11 @@ class Settings(BaseSettings):
     enable_self_check: bool = Field(default=False, alias="ENABLE_SELF_CHECK")
     self_check_max_retry: int = Field(default=1, alias="SELF_CHECK_MAX_RETRY")
 
+    enable_problem_persistence: bool = Field(default=True, alias="ENABLE_PROBLEM_PERSISTENCE")
+    enable_db_persistence: bool = Field(default=False, alias="ENABLE_DB_PERSISTENCE")
+    database_url: str = Field(default="", alias="DATABASE_URL")
+    database_echo: bool = Field(default=False, alias="DATABASE_ECHO")
+
     @property
     def resolved_api_key(self) -> str:
         return self.google_api_key or self.gemini_api_key
