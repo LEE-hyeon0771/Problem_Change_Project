@@ -62,3 +62,19 @@ def test_local_problem_store_increments_attempt_number(tmp_path: Path) -> None:
     second_payload = json.loads(second_abs.read_text(encoding="utf-8"))
     assert first_payload["attempt_no"] == 1
     assert second_payload["attempt_no"] == 2
+
+
+def test_local_problem_store_lists_and_gets_saved_records(tmp_path: Path) -> None:
+    store = LocalProblemStore(root_dir=tmp_path / "app" / "problems")
+
+    first = store.save(request=_request(seed=1), result=_title_result())
+    second = store.save(request=_request(seed=2), result=_title_result())
+
+    records = store.list_records(limit=10)
+    assert [record.problem_uid for record in records] == [second.problem_uid, first.problem_uid]
+
+    title_records = store.list_records(problem_type="title", limit=10)
+    assert len(title_records) == 2
+
+    assert store.get_record(first.problem_uid) == first
+    assert store.get_record("0" * 32) is None

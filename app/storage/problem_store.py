@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import json
+import logging
 from pathlib import Path
 from typing import cast, get_args
 
 from app.core.errors import PersistenceError
 from app.schemas.base import GenerateRequest, ProblemResponse
 from app.schemas.storage import ProblemResult, ProblemType, SavedProblemRecord, build_passage_id
+
+logger = logging.getLogger(__name__)
 
 
 class LocalProblemStore:
@@ -61,6 +64,36 @@ class LocalProblemStore:
         except OSError as exc:
             raise PersistenceError(f"Failed to update problem file '{abs_path}': {exc}") from exc
 
+    def list_records(self, *, problem_type: str | None = None, limit: int = 100) -> list[SavedProblemRecord]:
+        valid_types = set(get_args(ProblemType))
+        if problem_type is not None and problem_type not in valid_types:
+            raise PersistenceError(f"Unsupported problem type for listing: {problem_type!r}")
+
+        type_dirs = [self.root_dir / problem_type] if problem_type else [self.root_dir / kind for kind in valid_types]
+        records: list[SavedProblemRecord] = []
+        for type_dir in type_dirs:
+            if not type_dir.exists():
+                continue
+            for path in type_dir.glob("*/attempt_*.json"):
+                try:
+                    records.append(self._read_record(path))
+                except Exception as exc:
+                    logger.warning("Skipping invalid problem record '%s': %s", path, exc)
+
+        records.sort(key=lambda record: (record.created_at, record.attempt_no, record.problem_uid), reverse=True)
+        return records[:limit]
+
+    def get_record(self, problem_uid: str) -> SavedProblemRecord | None:
+        for path in self.root_dir.glob("*/" + "[a-f0-9]" * 16 + "/attempt_*.json"):
+            try:
+                record = self._read_record(path)
+            except Exception as exc:
+                logger.warning("Skipping invalid problem record '%s': %s", path, exc)
+                continue
+            if record.problem_uid == problem_uid:
+                return record
+        return None
+
     @staticmethod
     def _attempt_filename(attempt_no: int) -> str:
         return f"attempt_{attempt_no:03d}.json"
@@ -70,3 +103,9 @@ class LocalProblemStore:
         with abs_path.open(mode, encoding="utf-8") as fp:
             json.dump(record.model_dump(mode="json"), fp, ensure_ascii=False, indent=2)
             fp.write("\n")
+
+    @staticmethod
+    def _read_record(path: Path) -> SavedProblemRecord:
+        with path.open("r", encoding="utf-8") as fp:
+            payload = json.load(fp)
+        return SavedProblemRecord.model_validate(payload)

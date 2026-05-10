@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+import asyncio
 import logging
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 
-from fastapi import FastAPI, HTTPException
-from fastapi.concurrency import run_in_threadpool
+from fastapi import FastAPI, HTTPException, Query
 
 from app.agents.blank_agent import BlankAgent
 from app.agents.grammar_agent import GrammarAgent
@@ -32,6 +33,7 @@ from app.schemas.reference import ReferenceResponse
 from app.schemas.summary import SummaryResponse
 from app.schemas.title import TitleResponse
 from app.schemas.topic import TopicResponse
+from app.schemas.storage import ProblemType, SavedProblemRecord
 from app.schemas.vocab import VocabResponse
 from app.storage.persistence import ProblemPersistenceService
 from app.storage.problem_store import LocalProblemStore
@@ -60,12 +62,13 @@ app = FastAPI(
 
 llm_client = build_llm_client(settings)
 logger.info(
-    "LLM bootstrap: client=%s app_env=%s use_llm_generation=%s api_key_set=%s model=%s",
+    "LLM bootstrap: client=%s provider=%s app_env=%s use_llm_generation=%s credentials_set=%s model=%s",
     llm_client.__class__.__name__,
+    settings.normalized_llm_provider,
     settings.app_env,
     settings.use_llm_generation,
-    bool(settings.resolved_api_key),
-    settings.gemini_model,
+    settings.has_llm_credentials,
+    settings.active_model,
 )
 
 title_agent = TitleAgent(llm_client=llm_client, settings=settings)
@@ -109,15 +112,53 @@ async def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
+@app.get(
+    "/api/v1/problems",
+    response_model=list[SavedProblemRecord],
+    summary="저장된 문제 목록 조회",
+    description="로컬 문제 저장소(`app/problems`)에 저장된 변형문제를 최신순으로 조회합니다.",
+)
+async def list_saved_problems(
+    problem_type: ProblemType | None = Query(default=None, description="특정 문제 유형만 조회"),
+    limit: int = Query(default=100, ge=1, le=500, description="최대 조회 개수"),
+) -> list[SavedProblemRecord]:
+    try:
+        return await _run_sync(problem_store.list_records, problem_type=problem_type, limit=limit)
+    except PersistenceError as exc:
+        raise HTTPException(status_code=500, detail=f"Problem listing failed: {exc}") from exc
+
+
+@app.get(
+    "/api/v1/problems/{problem_uid}",
+    response_model=SavedProblemRecord,
+    summary="저장된 문제 상세 조회",
+    description="문제 저장 레코드 고유 ID로 저장된 변형문제를 조회합니다.",
+)
+async def get_saved_problem(problem_uid: str) -> SavedProblemRecord:
+    try:
+        record = await _run_sync(problem_store.get_record, problem_uid)
+    except PersistenceError as exc:
+        raise HTTPException(status_code=500, detail=f"Problem lookup failed: {exc}") from exc
+    if record is None:
+        raise HTTPException(status_code=404, detail="Saved problem not found.")
+    return record
+
+
+async def _run_sync(func: Any, *args: Any, **kwargs: Any):
+    loop = asyncio.get_running_loop()
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        return await loop.run_in_executor(executor, lambda: func(*args, **kwargs))
+
+
 async def _run_agent(agent: Any, request: GenerateRequest):
     try:
         if hasattr(agent, "agenerate"):
             problem = await agent.agenerate(request)
         else:
-            problem = await run_in_threadpool(agent.generate, request)
+            problem = await _run_sync(agent.generate, request)
 
         if settings.enable_problem_persistence and isinstance(problem, ProblemResponse):
-            saved = await run_in_threadpool(problem_persistence.persist, request=request, result=problem)
+            saved = await _run_sync(problem_persistence.persist, request=request, result=problem)
             storage_meta = {
                 "problem_uid": saved.problem_uid,
                 "passage_id": saved.passage_id,
