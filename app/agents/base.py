@@ -6,6 +6,7 @@ import logging
 import random
 import re
 from abc import ABC, abstractmethod
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Sequence, TypeVar
 
 from pydantic import BaseModel
@@ -157,7 +158,7 @@ class BaseAgent(ABC):
         return [Choice(label=labels[i], text=texts[i]) for i in range(5)]
 
     def _llm_enabled(self) -> bool:
-        return bool(self.settings.use_llm_generation and self.llm_client is not None and self.settings.resolved_api_key)
+        return bool(self.settings.use_llm_generation and self.llm_client is not None and self.settings.has_llm_credentials)
 
     def _prompt_context(
         self,
@@ -200,7 +201,7 @@ class BaseAgent(ABC):
                 self.problem_type,
                 self.settings.use_llm_generation,
                 self.llm_client is not None,
-                bool(self.settings.resolved_api_key),
+                self.settings.has_llm_credentials,
             )
             return None
 
@@ -216,7 +217,7 @@ class BaseAgent(ABC):
                 "LLM generation start for %s (prompt=%s, model=%s).",
                 self.problem_type,
                 name,
-                self.settings.gemini_model,
+                self.settings.active_model,
             )
             prompt = render_prompt(name, **context)
             schema = response_model.model_json_schema()
@@ -260,8 +261,11 @@ class BaseAgent(ABC):
         return meta
 
     async def agenerate(self, request: GenerateRequest) -> BaseModel:
-        # Agent internals are currently synchronous; run them off the event loop.
-        return await asyncio.to_thread(self.generate, request)
+        # Agent internals are synchronous; avoid asyncio's default executor because
+        # short-lived test loops can hang while shutting it down on some WSL setups.
+        loop = asyncio.get_running_loop()
+        with ThreadPoolExecutor(max_workers=1) as executor:
+            return await loop.run_in_executor(executor, self.generate, request)
 
     @abstractmethod
     def generate(self, request: GenerateRequest) -> BaseModel:

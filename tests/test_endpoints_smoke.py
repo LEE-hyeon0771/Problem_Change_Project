@@ -1,6 +1,10 @@
 from fastapi.testclient import TestClient
 
+import app.main as main_module
 from app.main import app
+from app.schemas.base import GenerateRequest
+from app.schemas.title import TitleResponse
+from app.storage.problem_store import LocalProblemStore
 from tests.fixtures import PASSAGE
 
 
@@ -47,3 +51,34 @@ def test_all_endpoints_smoke() -> None:
 def test_long_endpoint_removed() -> None:
     response = client.post("/api/v1/long", json=_payload())
     assert response.status_code == 404
+
+
+def test_saved_problem_library_endpoints(monkeypatch, tmp_path) -> None:
+    store = LocalProblemStore(root_dir=tmp_path / "app" / "problems")
+    saved = store.save(
+        request=GenerateRequest(**_payload()),
+        result=TitleResponse(
+            type="title",
+            passage=PASSAGE,
+            question="다음 글의 제목으로 가장 적절한 것은?",
+            choices=[
+                {"label": "①", "text": "A"},
+                {"label": "②", "text": "B"},
+                {"label": "③", "text": "C"},
+                {"label": "④", "text": "D"},
+                {"label": "⑤", "text": "E"},
+            ],
+            answer={"label": "③", "text": "C"},
+            explanation="해설",
+            meta={"difficulty": "mid", "seed": 123},
+        ),
+    )
+    monkeypatch.setattr(main_module, "problem_store", store)
+
+    list_response = client.get("/api/v1/problems")
+    assert list_response.status_code == 200
+    assert list_response.json()[0]["problem_uid"] == saved.problem_uid
+
+    detail_response = client.get(f"/api/v1/problems/{saved.problem_uid}")
+    assert detail_response.status_code == 200
+    assert detail_response.json()["result"]["type"] == "title"
