@@ -1,0 +1,214 @@
+/* 핵심단어장 단어 카드 */
+
+/* ---------- 핵심단어장 ---------- */
+
+.wordbook-count {
+  font-weight: 700;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.wordbook-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.wordbook-tools label {
+  display: grid;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.wordbook-tools input[type='text'] {
+  min-width: 240px;
+}
+
+.wordbook-tools .wordbook-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 10px;
+}
+
+.wordbook-list {
+  display: grid;
+  gap: 12px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.word-card {
+  padding: 16px 18px;
+  border: 1px solid var(--stroke);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.word-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.word-head h3 {
+  margin: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.28rem;
+}
+
+.word-surface {
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+}
+
+.word-badge {
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--teal);
+  color: #f8fffe;
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.word-badge.supporting {
+  background: rgba(18, 32, 37, 0.12);
+  color: var(--ink-soft);
+}
+
+.word-cefr {
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--stroke);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.word-passage-meaning {
+  margin: 10px 0 0;
+  font-weight: 700;
+}
+
+.word-passage-meaning span {
+  margin-right: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--sun-soft);
+  color: #8a3a1d;
+  font-size: 0.74rem;
+}
+
+.word-example {
+  margin: 8px 0 0;
+  padding-left: 10px;
+  border-left: 3px solid var(--sun-soft);
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.sense-list {
+  margin: 12px 0 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 12px;
+}
+
+.sense-list li::marker {
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+.sense-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.pos-badge {
+  padding: 2px 9px;
+  border-radius: 8px;
+  background: rgba(15, 118, 110, 0.12);
+  color: var(--teal-strong);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.sense-en {
+  margin: 4px 0 0;
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+}
+
+.sense-note {
+  margin: 4px 0 0;
+  color: #8a3a1d;
+  font-size: 0.82rem;
+}
+
+.relation-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.relation-label {
+  flex: 0 0 auto;
+  margin-top: 3px;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.relation-label.syn {
+  background: rgba(15, 118, 110, 0.14);
+  color: var(--teal-strong);
+}
+
+.relation-label.ant {
+  background: rgba(244, 140, 107, 0.22);
+  color: #8a3a1d;
+}
+
+.relation-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.relation-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  padding: 4px 10px;
+  border: 1px solid var(--stroke);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 0.84rem;
+}
+
+.relation-chip b {
+  font-weight: 700;
+}
+
+.relation-chip i {
+  font-style: normal;
+  font-size: 0.7rem;
+  color: var(--teal);
+}
+
+.relation-chip em {
+  font-style: normal;
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+}

@@ -1,7 +1,7 @@
-from app.schemas.base import Choice
-from app.schemas.grammar import GrammarResponse
-from app.schemas.vocab import VocabResponse
-from app.toolkit.vocab_grammar_normalize import normalize_vocab_grammar_problem
+from backend.schemas.base import Choice
+from backend.schemas.grammar import GrammarResponse
+from backend.schemas.vocab import VocabResponse
+from backend.toolkit.vocab_grammar_normalize import normalize_vocab_grammar_problem
 
 
 def _choices_with_alpha() -> list[Choice]:

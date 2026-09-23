@@ -1,12 +1,12 @@
 import pytest
 
-from app.core.errors import GenerationError
-from app.schemas.base import Choice
-from app.schemas.implicit import ImplicitResponse
-from app.schemas.insertion import InsertionResponse
-from app.schemas.order import OrderResponse
-from app.schemas.summary import SummaryResponse
-from app.toolkit.validators import (
+from backend.core.errors import GenerationError
+from backend.schemas.base import Choice
+from backend.schemas.implicit import ImplicitResponse
+from backend.schemas.insertion import InsertionResponse
+from backend.schemas.order import OrderResponse
+from backend.schemas.summary import SummaryResponse
+from backend.toolkit.validators import (
     validate_implicit,
     validate_implicit_from_original,
     validate_insertion,

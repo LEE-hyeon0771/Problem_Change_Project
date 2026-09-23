@@ -1,0 +1,84 @@
+/* @media print — 인쇄/PDF */
+
+@media print {
+  body {
+    background: #fff;
+  }
+
+  .page-bg,
+  .hero,
+  .exam-builder,
+  .exam-empty,
+  .replacement-panel,
+  .modal-layer,
+  .sub-tabs,
+  .use-bar {
+    display: none !important;
+  }
+
+  .page-wrap {
+    max-width: none;
+    padding: 0;
+  }
+
+  .exam-view,
+  .exam-compose,
+  .exam-shell,
+  .vocab-shell {
+    display: block;
+  }
+
+  .vocab-sheet {
+    column-gap: 24px;
+    column-rule: 1px solid rgba(0, 0, 0, 0.2);
+  }
+
+  .vocab-row {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.22);
+  }
+
+  /* 시험지 모드의 빈칸은 인쇄했을 때 확실히 보여야 합니다. */
+  .vocab-blank {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.45);
+  }
+
+  .exam-paper,
+  .exam-explanation-paper {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: #fff;
+  }
+
+  .exam-explanation-paper {
+    margin-top: 24px;
+    page-break-before: always;
+  }
+
+  .exam-paper-head {
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+  }
+
+  .exam-columns {
+    column-count: 2;
+    column-gap: 24px;
+    column-rule: 1px solid rgba(0, 0, 0, 0.28);
+  }
+
+  .exam-question {
+    padding: 0 0 10px;
+    border: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.22);
+    border-radius: 0;
+    background: #fff;
+  }
+
+  .exam-replace,
+  .drop-hint {
+    display: none !important;
+  }
+}

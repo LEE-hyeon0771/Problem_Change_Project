@@ -5,14 +5,14 @@ from pathlib import Path
 
 import pytest
 
-from app.schemas.base import GenerateRequest
-from app.schemas.title import TitleResponse
-from app.storage.problem_store import LocalProblemStore
+from backend.schemas.base import GenerateRequest
+from backend.schemas.title import TitleResponse
+from backend.storage.problem_store import LocalProblemStore
 from tests.fixtures import PASSAGE
 
 
 pytest.importorskip("sqlalchemy")
-from app.storage.db_store import SQLAlchemyProblemStore
+from backend.storage.db_store import SQLAlchemyProblemStore
 
 
 def _request() -> GenerateRequest:
@@ -49,7 +49,7 @@ def _result() -> TitleResponse:
 def test_sqlalchemy_problem_store_persists_record(tmp_path: Path) -> None:
     db_path = tmp_path / "test.db"
     db_url = f"sqlite+pysqlite:///{db_path}"
-    local_store = LocalProblemStore(root_dir=tmp_path / "app" / "problems")
+    local_store = LocalProblemStore(root_dir=tmp_path / "backend" / "problems")
     saved = local_store.save(request=_request(), result=_result())
 
     db_store = SQLAlchemyProblemStore(database_url=db_url)

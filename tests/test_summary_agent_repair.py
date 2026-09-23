@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from app.agents.summary_agent import SummaryAgent
-from app.schemas.base import Choice, GenerateRequest
-from app.schemas.summary import SummaryResponse
-from app.toolkit.validators import validate_summary
+from backend.agents.summary_agent import SummaryAgent
+from backend.schemas.base import Choice, GenerateRequest
+from backend.schemas.summary import SummaryResponse
+from backend.toolkit.validators import validate_summary
 from tests.fixtures import PASSAGE
 
 

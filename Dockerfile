@@ -6,10 +6,10 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 COPY pyproject.toml uv.lock README.md ./
-COPY app ./app
+COPY backend ./backend
 
 RUN uv sync --frozen --no-dev
 
-EXPOSE 8000
+EXPOSE 8100
 
-CMD ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uv", "run", "uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8100"]

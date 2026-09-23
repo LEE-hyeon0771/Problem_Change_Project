@@ -1,9 +1,15 @@
 .venv/
+.logs/
 __pycache__/
 .pytest_cache/
 *.pyc
 .env
+.env.*
+!.env.example
 frontend/node_modules/
 frontend/dist/
-app/problems/*
-!app/problems/problem_record.schema.json
+backend/problems/*
+!backend/problems/problem_record.schema.json
+problem_log/
+backend/wordbooks/
+.DS_Store

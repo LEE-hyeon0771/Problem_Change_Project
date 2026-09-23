@@ -61,6 +61,9 @@ function detectNameServer() {
   }
 }
 
+// 백엔드 포트. dev.sh가 BACKEND_PORT를 export 하므로 포트를 바꿔도 proxy가 따라간다.
+const BACKEND_PORT = process.env.BACKEND_PORT || '8100';
+
 function detectProxyTarget() {
   const envTarget = process.env.VITE_PROXY_TARGET;
   if (envTarget && envTarget.trim()) {
@@ -70,20 +73,20 @@ function detectProxyTarget() {
   const release = os.release().toLowerCase();
   const isWsl = process.platform === 'linux' && (release.includes('microsoft') || release.includes('wsl'));
   if (!isWsl) {
-    return 'http://localhost:8000';
+    return `http://localhost:${BACKEND_PORT}`;
   }
 
   const routeHostIp = detectWslHostFromRoute();
   if (routeHostIp && !routeHostIp.startsWith('10.255.')) {
-    return `http://${routeHostIp}:8000`;
+    return `http://${routeHostIp}:${BACKEND_PORT}`;
   }
 
   const dnsIp = detectNameServer();
   if (dnsIp && !dnsIp.startsWith('10.255.')) {
-    return `http://${dnsIp}:8000`;
+    return `http://${dnsIp}:${BACKEND_PORT}`;
   }
 
-  return 'http://127.0.0.1:8000';
+  return `http://127.0.0.1:${BACKEND_PORT}`;
 }
 
 export default defineConfig(({ mode }) => {

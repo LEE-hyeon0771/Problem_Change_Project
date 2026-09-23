@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: problem-change-app
     ports:
-      - "8000:8000"
+      - "8100:8100"
     environment:
       APP_ENV: "dev"
       LOG_LEVEL: "INFO"
@@ -30,7 +30,7 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - ./app/problems:/app/app/problems
+      - ./backend/problems:/app/backend/problems
     restart: unless-stopped
 
   db:

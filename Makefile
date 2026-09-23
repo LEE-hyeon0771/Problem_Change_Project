@@ -1,6 +1,6 @@
-UVICORN_APP := app.main:app
+UVICORN_APP := backend.main:app
 UVICORN_HOST := 0.0.0.0
-UVICORN_PORT := 8000
+UVICORN_PORT := 8100
 UV_PROJECT_ENV := $(shell if [ -d .venv-wsl ]; then echo .venv-wsl; else echo .venv; fi)
 
 .PHONY: start stop up down frontend

@@ -1,0 +1,379 @@
+/* 인쇄용 시험지·해설지 레이아웃 */
+
+.exam-shell {
+  animation: rise 0.5s ease both;
+  min-width: 0;
+}
+
+.exam-paper {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  border: 1px solid rgba(18, 32, 37, 0.16);
+  border-radius: 20px;
+  background: #fffdf8;
+  box-shadow: 0 26px 70px rgba(18, 32, 37, 0.12);
+  padding: 28px;
+  color: #111;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.exam-paper-head {
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 3px double #111;
+  text-align: center;
+}
+
+.exam-paper-head p,
+.exam-paper-head h2,
+.exam-paper-head small {
+  margin: 0;
+}
+
+.exam-paper-head p {
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.exam-paper-head h2 {
+  margin-top: 6px;
+  font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+}
+
+.exam-paper-head small {
+  display: block;
+  margin-top: 7px;
+  color: #555;
+  font-family: 'IBM Plex Sans KR', sans-serif;
+}
+
+.exam-columns {
+  column-count: 2;
+  column-gap: 26px;
+  column-rule: 1px solid rgba(0, 0, 0, 0.18);
+}
+
+.exam-question {
+  display: inline-block;
+  width: 100%;
+  break-inside: avoid;
+  margin: 0 0 18px;
+  padding: 12px 12px 14px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.exam-question.drop-target {
+  border-color: rgba(15, 118, 110, 0.72);
+  box-shadow: inset 0 0 0 2px rgba(15, 118, 110, 0.18);
+  background: #f5fffc;
+}
+
+.exam-question-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.exam-question-top > div {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.exam-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-weight: 900;
+  font-family: 'IBM Plex Sans KR', sans-serif;
+}
+
+.exam-type-pill {
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  color: #333;
+  font-family: 'IBM Plex Sans KR', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.exam-replace {
+  padding: 7px 9px;
+  font-size: 0.78rem;
+  font-family: 'IBM Plex Sans KR', sans-serif;
+}
+
+.exam-replace:disabled {
+  color: #777;
+  background: #f2f2ee;
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.drop-hint {
+  margin: -2px 0 8px 38px;
+  color: #555;
+  font-family: 'IBM Plex Sans KR', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.exam-stem {
+  margin: 0 0 9px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.exam-passage {
+  margin: 8px 0 10px;
+  white-space: pre-wrap;
+  line-height: 1.62;
+  color: #1d1d1d;
+  font-size: 0.96rem;
+}
+
+.exam-given-box,
+.exam-summary-box {
+  margin: 8px 0 10px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.24);
+  background: #f7f7f2;
+}
+
+.exam-given-box strong,
+.exam-summary-box strong {
+  display: block;
+  margin-bottom: 4px;
+  font-family: 'IBM Plex Sans KR', sans-serif;
+  font-size: 0.8rem;
+}
+
+.exam-given-box p,
+.exam-summary-box p {
+  margin: 0;
+  line-height: 1.55;
+  font-weight: 700;
+}
+
+.exam-summary-divider {
+  margin: 4px 0;
+  text-align: center;
+  font-weight: 900;
+}
+
+.exam-choice-note {
+  margin: 8px 0 0;
+  padding: 7px 8px;
+  border-radius: 8px;
+  border: 1px dashed rgba(0, 0, 0, 0.24);
+  color: #333;
+  font-family: 'IBM Plex Sans KR', sans-serif;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.exam-choice-list {
+  list-style: none;
+  display: grid;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+.exam-choice-list li {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 8px;
+  align-items: start;
+  line-height: 1.45;
+}
+
+.exam-choice-list p {
+  margin: 2px 0 0;
+  white-space: pre-wrap;
+}
+
+.exam-choice-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 26px;
+  font-weight: 900;
+  line-height: 1.45;
+}
+
+.exam-answer-sheet {
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 2px solid #111;
+  break-inside: avoid;
+}
+
+.exam-answer-sheet h3 {
+  margin: 0 0 10px;
+  font-family: 'IBM Plex Sans KR', sans-serif;
+}
+
+.exam-answer-sheet div {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.exam-answer-sheet span {
+  padding: 6px 7px;
+  border: 1px solid rgba(0, 0, 0, 0.22);
+  border-radius: 8px;
+  font-family: 'IBM Plex Sans KR', sans-serif;
+  font-weight: 800;
+  text-align: center;
+}
+
+.exam-explanation-paper {
+  width: 100%;
+  max-width: 1100px;
+  margin: 18px auto 0;
+  border: 1px solid rgba(18, 32, 37, 0.16);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 22px 58px rgba(18, 32, 37, 0.1);
+  padding: 28px;
+  color: #111;
+}
+
+.explanation-list {
+  display: grid;
+  gap: 12px;
+}
+
+.explanation-item {
+  break-inside: avoid;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: 14px;
+  padding: 13px 14px;
+  background: #fffdf8;
+}
+
+.explanation-title {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 10px;
+  align-items: start;
+}
+
+.explanation-title > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-weight: 900;
+}
+
+.explanation-title strong {
+  display: block;
+  font-weight: 900;
+}
+
+.explanation-title p {
+  margin: 4px 0 0;
+  color: #222;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.explanation-answer {
+  margin: 10px 0 7px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(15, 118, 110, 0.1);
+  color: #075c55;
+  font-weight: 900;
+}
+
+.explanation-body {
+  margin: 0;
+  color: #2a3438;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.explanation-body.muted {
+  color: #6f777b;
+}
+
+.exam-empty h3 {
+  margin: 0 0 8px;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.exam-empty p {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.modal-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  animation: fadeIn 0.18s ease both;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: rgba(8, 22, 26, 0.44);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+.modal-panel {
+  position: relative;
+  z-index: 1;
+  width: min(980px, 100%);
+  max-height: min(88vh, 980px);
+  overflow: auto;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 26px;
+  background: #fff;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.24);
+  padding: 20px;
+}
+
+.modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.modal-head h2 {
+  margin: 4px 0 0;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.modal-item {
+  margin-bottom: 0;
+  box-shadow: none;
+}
