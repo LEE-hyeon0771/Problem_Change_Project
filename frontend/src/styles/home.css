@@ -1,0 +1,112 @@
+/* 첫 화면 진입 카드 */
+
+/* ---------- 홈 화면 ---------- */
+
+.home {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 64px);
+}
+
+.home-inner {
+  width: 100%;
+  max-width: 1080px;
+  text-align: center;
+  animation: rise 0.6s ease both;
+}
+
+.home-inner h1 {
+  margin: 10px 0 12px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.9rem, 3.4vw, 3rem);
+  line-height: 1.1;
+}
+
+.home-lead {
+  margin: 0 auto 34px;
+  max-width: 60ch;
+  color: var(--ink-soft);
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.home-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 30px 26px 26px;
+  text-align: left;
+  border: 1px solid var(--stroke);
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: var(--shadow);
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.home-card:hover,
+.home-card:focus-visible {
+  transform: translateY(-4px);
+  border-color: rgba(15, 118, 110, 0.45);
+  box-shadow: 0 26px 60px rgba(15, 118, 110, 0.18);
+}
+
+.home-card-tagline {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.home-card strong {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.65rem;
+  line-height: 1.15;
+}
+
+.home-card p {
+  margin: 0;
+  flex: 1;
+  color: var(--ink-soft);
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+
+.home-card-go {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  font-weight: 800;
+  color: var(--teal);
+}
+
+.home-card-go::after {
+  content: '→';
+  transition: transform 0.18s ease;
+}
+
+.home-card:hover .home-card-go::after {
+  transform: translateX(4px);
+}
+
+.home-card-go em {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--sun-soft);
+  color: #8a3a1d;
+  font-style: normal;
+  font-size: 0.8rem;
+}
+
+.page-tabs button.tab-home {
+  color: var(--teal);
+}

@@ -42,13 +42,12 @@
   }
 </script>
 
-<main class="library-view">
-  <section class="panel library-panel">
+<section class="panel library-panel">
     <div class="library-head">
       <div>
-        <p class="eyebrow">내 문제 저장소</p>
-        <h2>내 문제 저장소</h2>
-        <p>생성했던 변형문제를 최신순으로 보관합니다. 카드를 누르면 큰 화면으로 다시 볼 수 있습니다.</p>
+        <p class="eyebrow">개인DB · 변형문제</p>
+        <h2>저장된 변형문제</h2>
+        <p>"사용"을 누른 변형문제가 최신순으로 쌓입니다. 카드를 누르면 큰 화면으로 다시 볼 수 있습니다.</p>
       </div>
       <button class="ghost" type="button" on:click={onRefresh} disabled={libraryLoading}>
         {libraryLoading ? '불러오는 중...' : '새로고침'}
@@ -98,11 +97,10 @@
     {:else}
       <div class="empty-box">
         <h3>저장된 문제가 없습니다</h3>
-        <p>문제 만들기 화면에서 문항을 생성하면 이곳에 자동으로 쌓입니다.</p>
+        <p>문제변형 화면에서 문항을 만든 뒤 "사용"을 누르면 이곳에 쌓입니다.</p>
       </div>
     {/if}
-  </section>
-</main>
+</section>
 
 {#if modalProblem}
   <div class="modal-layer">

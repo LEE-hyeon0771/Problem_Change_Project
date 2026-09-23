@@ -3,9 +3,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from app.schemas.base import GenerateRequest
-from app.schemas.title import TitleResponse
-from app.storage.problem_store import LocalProblemStore
+from backend.schemas.base import GenerateRequest
+from backend.schemas.title import TitleResponse
+from backend.storage.problem_store import LocalProblemStore
 from tests.fixtures import PASSAGE
 
 
@@ -41,7 +41,7 @@ def _title_result() -> TitleResponse:
 
 
 def test_local_problem_store_increments_attempt_number(tmp_path: Path) -> None:
-    root_dir = tmp_path / "app" / "problems"
+    root_dir = tmp_path / "backend" / "problems"
     store = LocalProblemStore(root_dir=root_dir)
 
     first = store.save(request=_request(seed=1), result=_title_result())
@@ -65,7 +65,7 @@ def test_local_problem_store_increments_attempt_number(tmp_path: Path) -> None:
 
 
 def test_local_problem_store_lists_and_gets_saved_records(tmp_path: Path) -> None:
-    store = LocalProblemStore(root_dir=tmp_path / "app" / "problems")
+    store = LocalProblemStore(root_dir=tmp_path / "backend" / "problems")
 
     first = store.save(request=_request(seed=1), result=_title_result())
     second = store.save(request=_request(seed=2), result=_title_result())

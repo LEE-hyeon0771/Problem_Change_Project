@@ -3,10 +3,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from app.schemas.base import GenerateRequest
-from app.schemas.title import TitleResponse
-from app.storage.persistence import ProblemPersistenceService
-from app.storage.problem_store import LocalProblemStore
+from backend.schemas.base import GenerateRequest
+from backend.schemas.title import TitleResponse
+from backend.storage.persistence import ProblemPersistenceService
+from backend.storage.problem_store import LocalProblemStore
 from tests.fixtures import PASSAGE
 
 
@@ -51,7 +51,7 @@ def _result() -> TitleResponse:
 
 
 def test_problem_persistence_service_updates_file_after_db_save(tmp_path: Path) -> None:
-    local_store = LocalProblemStore(root_dir=tmp_path / "app" / "problems")
+    local_store = LocalProblemStore(root_dir=tmp_path / "backend" / "problems")
     fake_db = FakeDBStore()
     service = ProblemPersistenceService(local_store=local_store, db_store=fake_db)
 

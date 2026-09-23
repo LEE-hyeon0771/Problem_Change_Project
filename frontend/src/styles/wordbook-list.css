@@ -1,0 +1,93 @@
+/* 개인DB 단어장 아코디언 */
+
+/* ---------- 단어장 아코디언 (개인DB) ---------- */
+
+.accordion-actions {
+  display: flex;
+  gap: 6px;
+  padding-bottom: 8px;
+}
+
+.wordbook-accordion {
+  display: grid;
+  gap: 10px;
+}
+
+.wordbook-folder {
+  border: 1px solid var(--stroke);
+  border-radius: 16px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.wordbook-folder.open {
+  border-color: rgba(15, 118, 110, 0.4);
+}
+
+.folder-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 4px 4px;
+}
+
+.folder-toggle {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.folder-caret {
+  color: var(--teal);
+  font-size: 0.95rem;
+  transition: transform 0.18s ease;
+  transform: rotate(-90deg);
+}
+
+.wordbook-folder.open .folder-caret {
+  transform: rotate(0deg);
+}
+
+.folder-title strong {
+  display: block;
+  font-size: 1.02rem;
+}
+
+.folder-title small {
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+}
+
+.folder-delete {
+  flex: 0 0 auto;
+}
+
+.folder-passage {
+  margin: 0;
+  padding: 0 16px 14px 46px;
+  color: var(--ink-soft);
+  font-size: 0.87rem;
+  line-height: 1.65;
+}
+
+.folder-body {
+  padding: 0 16px 16px;
+  border-top: 1px solid var(--stroke);
+}
+
+.folder-body .wordbook-list {
+  margin-top: 14px;
+}
+
+.wordbook-list.flat {
+  max-height: none;
+  overflow: visible;
+}

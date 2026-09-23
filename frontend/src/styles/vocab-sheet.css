@@ -1,0 +1,89 @@
+/* 단어 암기지 */
+
+/* ---------- 단어 암기지 ---------- */
+
+.vocab-sheet {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  column-gap: 26px;
+}
+
+.vocab-row {
+  display: flex;
+  gap: 9px;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(18, 32, 37, 0.12);
+  break-inside: avoid;
+}
+
+.vocab-no {
+  flex: 0 0 auto;
+  min-width: 22px;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.vocab-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.vocab-word-line {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+}
+
+.vocab-word-line strong {
+  font-size: 0.99rem;
+}
+
+.vocab-pos {
+  color: var(--teal);
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.vocab-meaning {
+  margin: 2px 0 0;
+  font-size: 0.89rem;
+}
+
+.vocab-related {
+  margin: 2px 0 0;
+  color: var(--ink-soft);
+  font-size: 0.79rem;
+}
+
+.vocab-related span {
+  display: inline-block;
+  min-width: 15px;
+  margin-right: 5px;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 0.7rem;
+}
+
+.vocab-related .syn {
+  background: rgba(15, 118, 110, 0.14);
+  color: var(--teal-strong);
+}
+
+.vocab-related .ant {
+  background: rgba(244, 140, 107, 0.22);
+  color: #8a3a1d;
+}
+
+.vocab-blank {
+  margin: 8px 0 2px;
+  border-bottom: 1px dashed rgba(18, 32, 37, 0.42);
+}
+
+.vocab-hint {
+  margin: 2px 0 0;
+  color: var(--ink-soft);
+  font-size: 0.75rem;
+}

@@ -1,0 +1,114 @@
+/* 개인DB 허브, 하위 탭, 사용 저장 바 */
+
+/* ---------- 개인DB 허브 / 하위 탭 ---------- */
+
+.hub {
+  display: flex;
+  justify-content: center;
+  padding: 24px 0 8px;
+}
+
+.hub-inner {
+  width: 100%;
+  max-width: 840px;
+  text-align: center;
+  animation: rise 0.5s ease both;
+}
+
+.hub-inner h2 {
+  margin: 8px 0 10px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+}
+
+.hub-lead {
+  margin: 0 auto 26px;
+  color: var(--ink-soft);
+}
+
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.sub-tabs {
+  display: inline-flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  padding: 5px;
+  border-radius: 14px;
+  border: 1px solid rgba(18, 32, 37, 0.12);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.sub-tabs button {
+  border: 0;
+  border-radius: 10px;
+  padding: 8px 13px;
+  background: transparent;
+  color: var(--ink-soft);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sub-tabs button.active {
+  color: #f8fffe;
+  background: var(--teal);
+}
+
+.sub-tabs button span {
+  margin-left: 5px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(18, 32, 37, 0.1);
+  font-size: 0.78rem;
+}
+
+.sub-tabs button.active span {
+  background: rgba(255, 255, 255, 0.26);
+}
+
+.exam-mode-tabs {
+  margin-bottom: 16px;
+}
+
+/* ---------- "사용" 저장 바 ---------- */
+
+.use-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0 4px;
+  padding: 14px 16px;
+  border: 1px solid rgba(15, 118, 110, 0.28);
+  border-radius: 16px;
+  background: rgba(15, 118, 110, 0.06);
+}
+
+.use-bar.done {
+  border-color: rgba(15, 118, 110, 0.5);
+  background: rgba(15, 118, 110, 0.12);
+}
+
+.use-bar-text {
+  flex: 1 1 260px;
+}
+
+.use-bar-text strong {
+  display: block;
+  font-size: 1rem;
+}
+
+.use-bar-text p {
+  margin: 3px 0 0;
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+}
+
+.use-title-input {
+  flex: 1 1 220px;
+  min-width: 180px;
+}

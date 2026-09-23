@@ -1,0 +1,77 @@
+/* 로딩 스켈레톤, 에러/빈 상태 박스 */
+
+.result-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.result-head h2 {
+  margin: 0;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.skeleton {
+  display: grid;
+  gap: 10px;
+}
+
+.skeleton span {
+  display: block;
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(15, 118, 110, 0.14);
+  animation: shimmer 1.1s linear infinite;
+}
+
+.skeleton span:nth-child(1) {
+  width: 92%;
+}
+
+.skeleton span:nth-child(2) {
+  width: 80%;
+}
+
+.skeleton span:nth-child(3) {
+  width: 86%;
+}
+
+.skeleton span:nth-child(4) {
+  width: 66%;
+}
+
+.error-box,
+.empty-box,
+.exam-message-box {
+  border-radius: 14px;
+  border: 1px solid rgba(18, 32, 37, 0.14);
+  background: rgba(255, 255, 255, 0.86);
+  padding: 14px;
+}
+
+.error-box {
+  border-color: rgba(178, 68, 40, 0.3);
+  background: rgba(252, 228, 221, 0.55);
+}
+
+.error-box strong {
+  color: #9e3f2a;
+}
+
+.exam-message-box {
+  margin-top: 12px;
+  border-color: rgba(15, 118, 110, 0.28);
+  background: rgba(232, 252, 247, 0.72);
+}
+
+.exam-message-box strong {
+  color: #075c55;
+}
+
+.error-box p,
+.empty-box p,
+.exam-message-box p {
+  margin: 8px 0 0;
+  color: var(--ink-soft);
+}

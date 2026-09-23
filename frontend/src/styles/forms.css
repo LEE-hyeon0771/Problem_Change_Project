@@ -1,0 +1,196 @@
+/* 입력 필드, 유형 그리드, 세그먼트, 버튼 */
+
+.field + .field {
+  margin-top: 16px;
+}
+
+.group-field {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+}
+
+.group-field legend {
+  margin-bottom: 8px;
+  padding: 0;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.field label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.label-row small {
+  color: var(--ink-soft);
+}
+
+input[type='text'],
+input[type='number'],
+textarea,
+select {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(18, 32, 37, 0.2);
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--ink);
+  padding: 12px 14px;
+  font: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type='text']:focus,
+input[type='number']:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: rgba(15, 118, 110, 0.6);
+  box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.14);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 220px;
+  line-height: 1.5;
+}
+
+.type-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.type-grid button {
+  border: 1px solid rgba(18, 32, 37, 0.16);
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 14px;
+  padding: 11px 10px;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.16s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.type-grid button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(15, 118, 110, 0.45);
+}
+
+.type-grid button.selected {
+  border-color: rgba(15, 118, 110, 0.72);
+  background: rgba(15, 118, 110, 0.14);
+}
+
+.type-grid button span {
+  display: block;
+  font-weight: 700;
+}
+
+.type-grid button small {
+  display: block;
+  margin-top: 3px;
+  color: var(--ink-soft);
+  font-size: 0.74rem;
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.segmented button {
+  border: 1px solid rgba(18, 32, 37, 0.17);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.84);
+  color: var(--ink);
+  padding: 9px 8px;
+  font-family: 'Space Grotesk', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+}
+
+.segmented button.active {
+  border-color: rgba(15, 118, 110, 0.75);
+  background: rgba(15, 118, 110, 0.13);
+}
+
+.inline-grid {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 12px;
+  align-items: end;
+}
+
+.toggles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.toggles label {
+  margin: 0;
+  font-weight: 500;
+  font-size: 0.88rem;
+  padding: 9px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(18, 32, 37, 0.14);
+  background: rgba(255, 255, 255, 0.84);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+button.primary,
+button.ghost {
+  border-radius: 12px;
+  border: 1px solid transparent;
+  font: inherit;
+  font-weight: 700;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+button.primary {
+  background: var(--teal);
+  color: #f8fffe;
+  min-width: 130px;
+}
+
+button.primary:disabled {
+  opacity: 0.62;
+  cursor: wait;
+}
+
+button.ghost {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(18, 32, 37, 0.18);
+  color: var(--ink);
+}
+
+button.ghost:disabled {
+  opacity: 0.54;
+  cursor: not-allowed;
+}
+
+button.ghost.danger {
+  border-color: rgba(178, 68, 40, 0.25);
+  color: #a14b33;
+}

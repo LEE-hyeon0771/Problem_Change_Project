@@ -3,9 +3,9 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
-from app.schemas.base import GenerateRequest
-from app.schemas.storage import SavedProblemRecord, build_passage_id
-from app.schemas.title import TitleResponse
+from backend.schemas.base import GenerateRequest
+from backend.schemas.storage import SavedProblemRecord, build_passage_id
+from backend.schemas.title import TitleResponse
 from tests.fixtures import PASSAGE
 
 
@@ -59,7 +59,7 @@ def test_saved_problem_record_from_generation() -> None:
         attempt_no=2,
         request=req,
         result=result,
-        file_path="app/problems/title/abc123456789abcd/attempt_002.json",
+        file_path="backend/problems/title/abc123456789abcd/attempt_002.json",
     )
 
     assert record.problem_type == "title"
@@ -78,5 +78,5 @@ def test_saved_problem_record_rejects_mismatch_type() -> None:
             attempt_no=1,
             request=req,
             result=result,
-            file_path="app/problems/summary/abc123456789abcd/attempt_001.json",
+            file_path="backend/problems/summary/abc123456789abcd/attempt_001.json",
         )

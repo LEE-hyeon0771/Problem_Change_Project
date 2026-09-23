@@ -1,6 +1,6 @@
-from app.agents.implicit_agent import ImplicitAgent
-from app.schemas.base import GenerateRequest
-from app.toolkit.validators import validate_implicit_from_original
+from backend.agents.implicit_agent import ImplicitAgent
+from backend.schemas.base import GenerateRequest
+from backend.toolkit.validators import validate_implicit_from_original
 from tests.fixtures import PASSAGE
 
 

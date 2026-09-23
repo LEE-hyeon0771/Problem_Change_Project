@@ -1,0 +1,153 @@
+/* @media 반응형 */
+
+@media (max-width: 1080px) {
+  .hub-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home {
+    min-height: 0;
+    padding: 20px 0 8px;
+  }
+
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .exam-compose {
+    grid-template-columns: 1fr;
+  }
+
+  .replacement-panel {
+    position: static;
+    max-height: none;
+  }
+
+  .replacement-list {
+    max-height: 420px;
+  }
+
+  .library-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .result {
+    order: 2;
+  }
+
+  .controls {
+    order: 1;
+  }
+
+  .exam-type-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .exam-answer-sheet div {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .page-wrap {
+    padding: 18px 12px 24px;
+  }
+
+  .hero,
+  .controls,
+  .result,
+  .exam-builder,
+  .exam-empty {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .type-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .inline-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .toggles {
+    grid-template-columns: 1fr;
+  }
+
+  .meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-tabs,
+  .library-head {
+    width: 100%;
+  }
+
+  .page-tabs,
+  .library-head {
+    flex-direction: column;
+  }
+
+  .library-tools,
+  .library-grid,
+  .exam-controls,
+  .exam-type-grid,
+  .replacement-tools {
+    grid-template-columns: 1fr;
+  }
+
+  .exam-field-head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .exam-type-actions {
+    flex-wrap: wrap;
+  }
+
+  .exam-paper {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .exam-columns {
+    column-count: 1;
+    column-rule: 0;
+  }
+
+  .exam-question {
+    padding: 11px;
+  }
+
+  .exam-explanation-paper {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .exam-question-top {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .drop-hint {
+    margin-left: 0;
+  }
+
+  .exam-answer-sheet div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .modal-layer {
+    padding: 10px;
+  }
+
+  .modal-panel,
+  .library-panel {
+    padding: 14px;
+    border-radius: 18px;
+  }
+}

@@ -1,10 +1,11 @@
 from fastapi.testclient import TestClient
 
-import app.main as main_module
-from app.main import app
-from app.schemas.base import GenerateRequest
-from app.schemas.title import TitleResponse
-from app.storage.problem_store import LocalProblemStore
+import backend.main as main_module
+from backend.apis import deps
+from backend.main import app
+from backend.schemas.base import GenerateRequest
+from backend.schemas.title import TitleResponse
+from backend.storage.problem_store import LocalProblemStore
 from tests.fixtures import PASSAGE
 
 
@@ -54,7 +55,7 @@ def test_long_endpoint_removed() -> None:
 
 
 def test_saved_problem_library_endpoints(monkeypatch, tmp_path) -> None:
-    store = LocalProblemStore(root_dir=tmp_path / "app" / "problems")
+    store = LocalProblemStore(root_dir=tmp_path / "backend" / "problems")
     saved = store.save(
         request=GenerateRequest(**_payload()),
         result=TitleResponse(
@@ -73,7 +74,7 @@ def test_saved_problem_library_endpoints(monkeypatch, tmp_path) -> None:
             meta={"difficulty": "mid", "seed": 123},
         ),
     )
-    monkeypatch.setattr(main_module, "problem_store", store)
+    monkeypatch.setattr(deps, "problem_store", store)
 
     list_response = client.get("/api/v1/problems")
     assert list_response.status_code == 200

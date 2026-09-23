@@ -1,0 +1,113 @@
+/* 동의어 교체 토글·검토 목록 */
+
+/* ---------- 동의어 교체 ---------- */
+
+.swap-option {
+  padding: 12px 14px;
+  border: 1px solid rgba(15, 118, 110, 0.24);
+  border-radius: 12px;
+  background: rgba(15, 118, 110, 0.05);
+}
+
+.swap-option.disabled {
+  border-color: var(--stroke);
+  background: rgba(18, 32, 37, 0.04);
+  opacity: 0.75;
+}
+
+.swap-option label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.swap-option small {
+  display: block;
+  margin-top: 5px;
+  padding-left: 22px;
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.swap-option small.swap-warn {
+  color: #8a3a1d;
+}
+
+.swap-review {
+  margin-bottom: 14px;
+  padding: 14px 16px;
+  border: 1px solid rgba(244, 140, 107, 0.4);
+  border-radius: 14px;
+  background: rgba(244, 140, 107, 0.07);
+}
+
+.swap-review header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.swap-review header span {
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+}
+
+.swap-review ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+
+.swap-review li label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+}
+
+.swap-review li.reverted {
+  opacity: 0.55;
+}
+
+.swap-from {
+  color: var(--ink-soft);
+  text-decoration: line-through;
+}
+
+.swap-review li.reverted .swap-from {
+  text-decoration: none;
+}
+
+.swap-arrow {
+  color: var(--ink-soft);
+}
+
+.swap-to {
+  font-weight: 700;
+  color: var(--teal-strong);
+}
+
+.swap-review li.reverted .swap-to {
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+
+.swap-note {
+  margin: 2px 0 0 24px;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+}
+
+.swap-reverted-note {
+  margin: 10px 0 0;
+  color: #8a3a1d;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
